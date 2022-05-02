@@ -1,3 +1,4 @@
 ifconfig eth0 10.10.10.10/8 # Temporary Address
 ifconfig eth1 172.16.0.1/29
-#route add default gw 172.16.0.1
+ip route add 172.16.2.16/29 via 172.16.0.3 dev eth1
+ip route add 172.16.1.128/29 via 172.16.0.2 dev eth1
