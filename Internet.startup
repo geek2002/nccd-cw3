@@ -4,6 +4,6 @@ ifconfig eth2 22.39.224.17/30
 ifconfig eth3 129.11.254.157/16
 
 
-#ip route add 172.16.0.0/29 via 129.11.254.156 dev eth3
-#ip route add 172.16.1.0/29 via 129.11.254.156 dev eth3
-#ip route add 172.16.2.0/29 via 129.11.254.156 dev eth3
+ip route add 172.16.0.0/29 via 129.11.254.156 dev eth3
+ip route add 172.16.1.128/29 via 129.11.254.156 dev eth3
+ip route add 172.16.2.16/29 via 129.11.254.156 dev eth3

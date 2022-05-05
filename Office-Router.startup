@@ -1,13 +1,20 @@
 ifconfig eth0 129.11.254.156/16
 ifconfig eth1 172.16.0.1/29
-ip route add 172.16.2.16/29 via 172.16.0.3 dev eth1
+
 ip route add 172.16.1.128/29 via 172.16.0.2 dev eth1
+ip route add 172.16.2.16/29 via 172.16.0.3 dev eth1
 ip route add default via 129.11.254.157 dev eth0
 
+iptables -F
+iptables -P FORWARD DROP
+iptables -P INPUT DROP
+iptables -A INPUT -i eth0 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+iptables -A FORWARD -i eth0 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+iptables -A FORWARD -i eth1 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
 
 
 iptables --table nat --flush
+iptables -t nat -A PREROUTING -p tcp --dport 389 -j DNAT --to-destination 172.16.1.130:389
 
-iptables --table nat --append PREROUTING --protocol tcp --destination 172.16.0.1 --dport 389 --jump DNAT --to-destination 172.16.1.130
+iptables -A FORWARD -p tcp --dport 389 -j ACCEPT
 
-iptables --table nat --append POSTROUTING --protocol tcp --destination 172.16.1.130 --dport 389 --jump SNAT --to-source 172.16.0.1
