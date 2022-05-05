@@ -3,3 +3,11 @@ ifconfig eth1 172.16.0.1/29
 ip route add 172.16.2.16/29 via 172.16.0.3 dev eth1
 ip route add 172.16.1.128/29 via 172.16.0.2 dev eth1
 ip route add default via 129.11.254.157 dev eth0
+
+
+
+iptables --table nat --flush
+
+iptables --table nat --append PREROUTING --protocol tcp --destination 172.16.0.1 --dport 389 --jump DNAT --to-destination 172.16.1.130
+
+iptables --table nat --append POSTROUTING --protocol tcp --destination 172.16.1.130 --dport 389 --jump SNAT --to-source 172.16.0.1
